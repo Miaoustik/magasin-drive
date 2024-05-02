@@ -1,0 +1,170 @@
+@startuml database
+hide circle
+skinparam Linetype ortho
+
+
+entity "Product" as product {
+    *id number <<generated>>
+    --
+    *name : string
+    *price : integer
+    *weight : integer
+    *pricePerKilo: integer
+    image : string
+    promo: integer
+    ispromopercent: boolean
+    *comments: relation
+    rating: float
+    ingredients: text
+    allergens: text
+    conservationUse: text
+    nutriscore: integer ??
+}
+
+entity "OrderProduct" as orderProduct {
+    *id number <<generated>>
+    --
+    *name : string
+    *price : integer
+    *weight : integer
+    *product: relation
+    image : string
+    promo: integer
+    ispromopercent: boolean
+}
+
+entity "User" as user {
+    *id number <<generated>>
+    --
+    *email : string
+    *password : string
+    *genre : integer ??
+    *firstname: string
+    *lastname: string
+    *birthday: datetime
+    *address: string
+    *postalcode: string
+    *city: string
+    *phone: string
+    *lists: relation
+}
+
+entity "Order" as order {
+    *id number <<generated>>
+    --
+    *number : integer
+    *createdAt : datetime
+    *withdraw: relation
+    *orderOrderProducts: relation
+    *totalprice: integer
+    *savings: integer
+}
+
+entity "OrderOrderProduct" as orderOrderProduct {
+    *id number <<generated>>
+    --
+    *order: relation
+    *orderProduct: relation
+    *quantity: integer
+}
+
+entity "CartProduct" as cartProduct {
+    *id number <<generated>>
+    --
+    *cart: relation
+    *product: relation
+    *quantity: integer
+}
+
+entity "ListProduct" as listProduct {
+    *id number <<generated>>
+    --
+    *list: relation
+    *product: relation
+    *quantity: integer
+}
+
+entity "Withdraw" as withdraw {
+    *id number <<generated>>
+    --
+    *time: datetime
+}
+
+entity "Comment" as comment {
+    *id number <<generated>>
+    --
+    *user : relation
+    *rating: integer
+    *createdAt: datetime
+    *packaging: integer
+    *valueForMoney: integer
+    *title: string
+    *content: text
+    *isRecommended: boolean
+}
+
+entity "List" as list {
+    *id number <<generated>>
+    --
+    *listProducts: relation
+    *createdAt: datetime
+    *user: relation
+}
+
+entity "MainDepartmentCategory" as mainDepartmentCategory {
+    *id number <<generated>>
+    --
+    *departments: relation
+}
+
+entity "department" as department {
+    *id number <<generated>>
+    --
+    *productCategories: relation
+}
+
+entity "cart" as cart {
+    *id number <<generated>>
+    --
+    *cartProducts: relation
+    *user: relation
+}
+
+entity "productCategory" as productCategory {
+    *id number <<generated>>
+    --
+    *products: relation
+    *name: string
+}
+
+product "1..1" --- "0..*" comment
+
+user "1..1" --- "0..*" comment
+
+order "1..1" --- "1..1" withdraw
+
+order "1..1" --- "1..*" orderOrderProduct
+
+orderOrderProduct "0..*" --- "1..1" orderProduct
+
+product "1..1" --- "0..*" orderProduct
+
+list "1..1" --- "1..*" listProduct
+
+product "1..1" --- "0..*" listProduct
+
+mainDepartmentCategory "1..1" --- "1..*" department
+
+department "1..1" --- "1..*" productCategory
+
+productCategory "1..1" -- "1..*" product
+
+cart "1..1" --- "0..*" cartProduct
+
+cartProduct "0..*" --- "1..1" product
+
+user "1..1" -- "0..*" list
+
+user "1..1" --- "1..1" cart
+
+@enduml

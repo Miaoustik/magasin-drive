@@ -1,0 +1,275 @@
+/* -------------------- */
+/* Reset                */
+/* -------------------- */
+
+/* Box sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Reset margins */
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+figure,
+picture {
+  margin: 0;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* Make form elements easier to work with */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* remove animations for people who've turned them off */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Make focus visible only on keyboard navigation */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 3px solid white;
+}
+
+/* -------------------- */
+/* Variables            */
+/* -------------------- */
+
+
+
+$wrapper-max-width: 80em;
+$clr-grey: #262626;
+
+/* -------------------- */
+/* Base                 */
+/* -------------------- */
+
+@font-face {
+  font-family: 'Roboto';
+  src:
+    url('../fonts/Roboto-Regular.ttf') format("truetype")
+}
+
+/* -------------------- */
+/* Utility classes      */
+/* -------------------- */
+
+/* general */
+.flex {
+  display: flex;
+  gap: var(--gap, 1rem);
+}
+
+.grid {
+  display: grid;
+  gap: var(--gap, 1rem);
+}
+
+.flow > * + * {
+  margin-top: var(--flow-space, 1rem);
+}
+
+.d-block {
+  display: block;
+}
+
+.d-inline-block {
+  display: inline-block;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap; /* added line */
+  border: 0;
+}
+
+.shadow {
+  box-shadow: 1rem 1rem 1rem 0.5rem hsl(0 0 0 / 0.5);
+}
+
+/* -------------------- */
+/* Layout               */
+/* -------------------- */
+
+body {
+  font-family: 'Roboto', serif;
+  min-height: 100vh;
+}
+
+
+.wrapper {
+  margin-inline: auto;
+  max-width: $wrapper-max-width;
+  padding-inline: .25rem;
+  display: grid;
+}
+
+@media screen and (min-width: 45em) {
+  .wrapper {
+    padding-inline: 2rem;
+  }
+}
+
+/* Login */
+
+.login-main-wrapper {
+  display: flex;
+
+  .login-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.login--wrapper {
+  padding: 2rem;
+  display: grid;
+  align-content: center;
+  gap: 1rem;
+  min-width: 25rem;
+  form {
+    display: grid;
+    gap: 1rem;
+
+    .submit {
+      margin-top: 1rem;
+    }
+  }
+
+  .input-group {
+    display: grid;
+    gap: .25rem;
+
+    label {
+      color: $clr-grey;
+    }
+  }
+
+  .login-orconnect {
+    text-align: center;
+  }
+
+  button {
+    background-color: transparent;
+    border: 1px solid black;
+    border-radius: .25rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .5rem 1rem;
+
+    svg {
+      width: 2rem;
+    }
+
+    &:hover {
+      background-color: rgba(0 0 0 /.1);
+    }
+  }
+}
+
+@media screen and (min-width: 45em) {
+  .login-img {
+    background-image: url("~/public/build/images/login.jpg");
+    flex: 1;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+}
+
+/* -------------------- */
+/* Components           */
+/* -------------------- */
+
+input {
+  padding-block: .5rem;
+  padding-inline: 1rem;
+  border-radius: .5rem;
+  outline: none;
+  border: 1px solid rgba(0 0 0 / .5);
+
+  &:focus-visible {
+    box-shadow: inset 0 0 0 1px black;
+  }
+}
+
+.navbar {
+  border-bottom: 1px solid black;
+  box-shadow: .1rem .1rem 1rem 0.5rem hsl(0 0 0 / 0.2);
+  height: fit-content;
+  display: block;
+  position: sticky;
+  top: 0;
+  background-color: white;
+
+  ul {
+    margin-inline: auto;
+    list-style: none;
+    display: flex;
+    justify-content: start;
+    padding: 0;
+    margin-block: 0;
+    padding-inline: 2rem;
+    padding-block: 1rem;
+    align-items: center;
+    gap: 1.5rem;
+
+    .connectLink {
+      margin-left: auto;
+    }
+
+    a {
+      text-decoration: none;
+      color: black;
+    }
+
+    form {
+      flex: 1;
+
+      input {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.alert-danger {
+  color: red;
+}
+

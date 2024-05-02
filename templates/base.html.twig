@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Mon fake magasin | DRIVE{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body>
+        <nav class="navbar">
+            <ul>
+                <li><a href="{{ path('app_homepage') }}">Mon magasin drive</a></li>
+                <li><button>Rayons</button></li>
+                <li><a>Promotions</a></li>
+                {% if search ?? true %}
+                    <form>
+                        <label for="productSearch" class="sr-only">Rechercher un produit ...</label>
+                        <input id="productSearch" class="input" placeholder="Rechercher un produit ...">
+                    </form>
+                {% endif %}
+
+                {% if app.request.get('_route') != 'app_login' and not app.user %}
+                    <li class="connectLink">
+                        <a href="{{ path('app_login') }}">Se connecter</a>
+                    </li>
+                {% endif %}
+
+                {% if app.user %}
+                    <li class="connectLink">
+                        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% block body %}
+
+        {% endblock %}
+    </body>
+</html>
