@@ -266,4 +266,28 @@ input:focus-visible {
   color: red;
 }
 
+#toasts {
+  position: fixed;
+  bottom: 5%;
+  left: 2.5%;
+  display: grid;
+  gap: 1rem;
+}
+#toasts .toast {
+  border: 1px green solid;
+  padding: 2rem 3rem;
+  background-color: lightgreen;
+  border-radius: 1rem;
+  position: relative;
+}
+#toasts .toast button {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  top: 5%;
+  right: 3%;
+  padding: 0.25rem;
+}
+
 /*# sourceMappingURL=app.css.map */

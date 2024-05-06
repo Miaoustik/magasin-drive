@@ -1,0 +1,10 @@
+{% block success_stream %}
+    <turbo-stream action="append" target="toasts">
+        <template>
+            <div class="toast {{ type|default("success") }}" data-controller="toast">
+                {{ message }}
+                <button data-action="click->toast#close"><span>&#10006;</span></button>
+            </div>
+        </template>
+    </turbo-stream>
+{% endblock %}

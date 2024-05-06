@@ -19,6 +19,9 @@
                 <li><a href="{{ path('app_homepage') }}">Mon magasin drive</a></li>
                 <li><button>Rayons</button></li>
                 <li><a>Promotions</a></li>
+
+                <li><a href="/test">toast</a></li>
+
                 {% if search ?? true %}
                     <form>
                         <label for="productSearch" class="sr-only">Rechercher un produit ...</label>
@@ -45,5 +48,9 @@
         {% block body %}
 
         {% endblock %}
+
+        <div id="toasts">
+
+        </div>
     </body>
 </html>

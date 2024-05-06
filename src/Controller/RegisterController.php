@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\UX\Turbo\TurboBundle;
 
 class RegisterController extends AbstractController
 {
@@ -131,8 +132,13 @@ class RegisterController extends AbstractController
             $manager->persist($user);
             $manager->flush();
 
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
 
-            //TODO alert success profile updated
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('toast.html.twig', [
+                    'message' => "Votre profil à été mis à jour."
+                ]);
+            }
         }
 
 

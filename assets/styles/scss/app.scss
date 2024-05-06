@@ -307,3 +307,29 @@ input {
   color: red;
 }
 
+#toasts {
+  position: fixed;
+  bottom: 5%;
+  left: 2.5%;
+  display: grid;
+  gap: 1rem;
+
+  .toast {
+    border: 1px green solid;
+    padding: 2rem 3rem;
+    background-color: lightgreen;
+    border-radius: 1rem;
+    position: relative;
+
+    button {
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+      position: absolute;
+      top: 5%;
+      right: 3%;
+      padding: .25rem;
+    }
+  }
+}
+
