@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use App\Enum\UserGenreEnum;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -21,6 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Email]
     #[ORM\Column(length: 180)]
+    #[Groups('login')]
     private ?string $email = null;
 
     /**
@@ -32,8 +35,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[NotBlank]
+    #[Groups('login')]
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -44,6 +48,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private bool $isCompleted = false;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[NotBlank]
+    #[Groups('profile')]
+    private ?UserGenreEnum $genre = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[NotBlank]
+    #[Groups('profile')]
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[NotBlank]
+    #[Groups('profile')]
+    private ?string $lastName = null;
+
+    #[ORM\Column(nullable: true)]
+    #[NotBlank]
+    #[Groups('profile')]
+    private ?\DateTimeImmutable $birthDay = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[NotBlank]
+    #[Groups('profile')]
+    private ?string $phoneNumber = null;
 
     public function getId(): ?int
     {
@@ -99,7 +128,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -155,4 +184,72 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return UserGenreEnum|null
+     */
+    public function getGenre(): ?UserGenreEnum
+    {
+        return $this->genre;
+    }
+
+    /**
+     * @param UserGenreEnum|null $genre
+     * @return User
+     */
+    public function setGenre(?UserGenreEnum $genre): User
+    {
+        $this->genre = $genre;
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): static
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): static
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getBirthDay(): ?\DateTimeImmutable
+    {
+        return $this->birthDay;
+    }
+
+    public function setBirthDay(?\DateTimeImmutable $birthDay): static
+    {
+        $this->birthDay = $birthDay;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(?string $phoneNumber): static
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+
 }

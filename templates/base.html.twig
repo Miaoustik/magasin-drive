@@ -34,6 +34,9 @@
 
                 {% if app.user %}
                     <li class="connectLink">
+                        <a href="{{ path('app_complete_profil') }}">Compléter mon profil</a>
+                    </li>
+                    <li class="connectLink">
                         <a href="{{ path('app_logout') }}">Se déconnecter</a>
                     </li>
                 {% endif %}

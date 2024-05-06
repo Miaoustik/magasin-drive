@@ -160,10 +160,16 @@ body {
 .login--wrapper .input-group label {
   color: #262626;
 }
+.login--wrapper .password {
+  position: relative;
+}
+.login--wrapper .password input {
+  padding-right: 3rem;
+}
 .login--wrapper .login-orconnect {
   text-align: center;
 }
-.login--wrapper button {
+.login--wrapper button:not(.toggle-password-button) {
   background-color: transparent;
   border: 1px solid black;
   border-radius: 0.25rem;
@@ -173,11 +179,29 @@ body {
   align-items: center;
   padding: 0.5rem 1rem;
 }
-.login--wrapper button svg {
+.login--wrapper button:not(.toggle-password-button) svg {
   width: 2rem;
 }
-.login--wrapper button:hover {
+.login--wrapper button:not(.toggle-password-button):hover {
   background-color: rgba(0, 0, 0, 0.1);
+}
+.login--wrapper .toggle-password-button {
+  position: absolute;
+  place-self: end;
+  padding: 0;
+  margin: 0;
+  top: 55%;
+  right: 5%;
+  border: none;
+  cursor: pointer;
+}
+
+.complete-genre .required:nth-child(2) {
+  margin-right: 1rem;
+}
+.complete-genre #form_genre {
+  display: flex;
+  align-items: center;
 }
 
 @media screen and (min-width: 45em) {
@@ -208,6 +232,7 @@ input:focus-visible {
   height: fit-content;
   display: block;
   position: sticky;
+  z-index: 2;
   top: 0;
   background-color: white;
 }

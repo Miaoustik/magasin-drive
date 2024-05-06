@@ -3,18 +3,25 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Enum\UserGenreEnum;
 use App\Security\AppAuthenticator;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class RegisterController extends AbstractController
 {
@@ -33,12 +40,18 @@ class RegisterController extends AbstractController
 
         $user = new User();
 
-        $form = $this->createFormBuilder($user)
+        $form = $this->createFormBuilder($user, [
+            'validation_groups' => ['login']
+        ])
             ->add('email', EmailType::class, [
                 'label' => 'Email'
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'Mot de passe'
+                'label' => 'Mot de passe',
+                'toggle' => true,
+                'use_toggle_form_theme' => false,
+                'hidden_label' => '',
+                'visible_label' => '',
             ])
             ->getForm();
 
@@ -61,10 +74,9 @@ class RegisterController extends AbstractController
 
             if (count($form->getErrors()) === 0) {
                 return $security->login($user, AppAuthenticator::class);
+
             }
         }
-
-        //TODO une fois les champ ajouter a la page s'inscrire et les données traités mettre isComplete a true sur l'user
 
         return $this->render('security/login.html.twig', [
             'search' => false,
@@ -76,12 +88,56 @@ class RegisterController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/remplir-profil', name: 'app_complete_profil')]
-    public function completeProfile(): Response
+    public function completeProfile(
+        Request $request,
+        EntityManagerInterface $manager
+    ): Response
     {
+        $user = $this->getUser();
 
-        // TODO rajouter les champ prenom etc a la page complete-profile et rediriger a la suite d'une inscription par social.
+        $form = $this->createFormBuilder($user, [
+            'validation_groups' => ['profile']
+        ])
+            ->add('genre', EnumType::class, [
+                'label' => 'Civilité',
+                'class' => UserGenreEnum::class,
+                'expanded' => true
+            ])
+            ->add('firstName', TextType::class, [
+                'label' => 'Prénom'
+            ])
+            ->add('lastName', TextType::class, [
+                'label' => 'Nom de famille'
+            ])
+            ->add('birthDay', BirthdayType::class, [
+                'label' => 'Date de naissance',
+                'widget' => 'single_text',
 
-        return new Response();
+            ])
+            ->add('phoneNumber', TelType::class, [
+                'label' => 'Numéro de téléphone'
+            ])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var User $user */
+            $user = $form->getData();
+            $user->setCompleted(true);
+
+            $manager->persist($user);
+            $manager->flush();
+
+
+            //TODO alert success profile updated
+        }
+
+
+        return $this->render('security/complete.html.twig', [
+            'form' => $form
+        ]);
     }
 }

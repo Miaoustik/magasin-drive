@@ -1,89 +1,91 @@
-{% extends 'base.html.twig' %}
+{% extends 'security/_login.html.twig' %}
 
 {% block title %}{{ loginText }} | {{ parent() }}{% endblock %}
 
-{% block body %}
-    <div class="login-main-wrapper">
-        <div class="login-img"></div>
-        <div class="login-wrapper">
-            <div class="login--wrapper">
+{% block login %}
+    <h1>
+        {{ loginText }}
+    </h1>
 
-                <h1>
-                    {{ loginText }}
-                </h1>
 
-                {% if app.user %}
-                    <div>
-                        Bonjour {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>
-                    </div>
-                {% endif %}
+    {% if loginSign == true %}
+        <p>
+            Pas encore de compte ? <a href="{{ path('app_register') }}">S'inscrire</a>
+        </p>
+    {% endif %}
 
-                {% if loginSign == true %}
-                <p>
-                    Pas encore de compte ? <a href="{{ path('app_register') }}">S'inscrire</a>
-                </p>
-                {% endif %}
+    {% if loginSign == true %}
+        <form method="post">
 
-                {% if loginSign == true %}
-                    <form method="post">
+            {% if error %}
+                <div role="alert" class="alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
 
-                        {% if error %}
-                            <div role="alert" class="alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                        {% endif %}
-
-                        <div class="input-group">
-                            <label for="email">Votre email</label>
-                            <input value="{{ last_username }}" type="email" name="email" id="email" placeholder="example@example.fr" required autocomplete="email" autofocus>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="password" class="">Mot de passe</label>
-                            <input id="password" type="password" name="password" required autocomplete="current-password">
-                        </div>
-
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-                        <button class="submit" type="submit">{{ loginText }}</button>
-
-                    </form>
-                {% else %}
-                    {{ form_start(form) }}
-
-                    {% if not form.vars.valid %}
-                        <div role="alert" class="alert-danger">
-                            {{ form_errors(form) }}
-                        </div>
-                    {% endif %}
-
-                    <div class="input-group">
-                        {{ form_label(form.email) }}
-                        {{ form_widget(form.email, {
-                            'attr': {
-                                'placeholder': 'example@example.fr',
-                                'autocomplete': 'email'
-                            }
-                        }) }}
-                    </div>
-
-                    <div class="input-group">
-                        {{ form_label(form.password) }}
-                        {{ form_widget(form.password) }}
-                    </div>
-
-                    {{ form_rest(form) }}
-
-                    <button class="submit" type="submit">{{ loginText }}</button>
-
-                    {{ form_end(form) }}
-                {% endif %}
-                <p class="login-orconnect">Ou {{ loginText|lower }} avec </p>
-
-                {% include 'security/_google.html.twig' with {'socialLink': path('google_connect'), 'socialText': 'Google'} %}
-                {% include 'security/_github.html.twig' with {'socialLink': path('github_connect'), 'socialText': 'Github'} %}
-
+            <div class="input-group">
+                <label for="email">Votre email</label>
+                <input value="{{ last_username }}" type="email" name="email" id="email" placeholder="example@example.fr" required autocomplete="email" autofocus>
             </div>
+
+            <div class="input-group password">
+                <label for="password" class="">Mot de passe</label>
+                <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    required
+                    autocomplete="current-password"
+                    {{ stimulus_controller('symfony/ux-toggle-password/toggle-password', {
+                        visibleLabel: '',
+                        hiddenLabel: '',
+                        buttonClasses: ['toggle-password-button'],
+                        })
+                    }}
+                >
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button class="submit" type="submit">{{ loginText }}</button>
+
+        </form>
+    {% else %}
+        {{ form_start(form) }}
+
+        {% if not form.vars.valid %}
+            <div role="alert" class="alert-danger">
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+
+        <div class="input-group">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email, {
+                'attr': {
+                    'placeholder': 'example@example.fr',
+                    'autocomplete': 'email'
+                }
+            }) }}
         </div>
 
-    </div>
+        <div class="input-group password">
+            {{ form_label(form.password) }}
+            {{ form_widget(form.password, {
+                'attr': {
+                    'autocomplete': 'current-password'
+                }
+            }) }}
+        </div>
+
+        {{ form_rest(form) }}
+
+        <button class="submit" type="submit">{{ loginText }}</button>
+
+        {{ form_end(form) }}
+    {% endif %}
+    <p class="login-orconnect">Ou {{ loginText|lower }} avec </p>
+
+    {% include 'security/_google.html.twig' with {'socialLink': path('google_connect'), 'socialText': 'Google'} %}
+    {% include 'security/_github.html.twig' with {'socialLink': path('github_connect'), 'socialText': 'Github'} %}
+
 {% endblock %}
 

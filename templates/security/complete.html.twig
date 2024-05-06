@@ -1,0 +1,56 @@
+{% extends 'security/_login.html.twig' %}
+
+{% block login %}
+    <h1>Compléter mon profil</h1>
+
+    {{ form_start(form) }}
+
+    {% if not form.vars.valid %}
+        <div role="alert" class="alert-danger">
+            {{ form_errors(form) }}
+        </div>
+    {% endif %}
+
+    <div class="input-group complete-genre">
+        {{ form_label(form.genre) }}
+        {{ form_widget(form.genre) }}
+    </div>
+
+    <div class="input-group">
+        {{ form_label(form.firstName) }}
+        {{ form_widget(form.firstName, {
+            'attr': {
+                'placeholder': 'Mon prénom...'
+            }
+        }) }}
+    </div>
+
+    <div class="input-group">
+        {{ form_label(form.lastName) }}
+        {{ form_widget(form.lastName, {
+            'attr': {
+                'placeholder': 'Mon nom de famille...'
+            }
+        }) }}
+    </div>
+
+    <div class="input-group">
+        {{ form_label(form.birthDay) }}
+        {{ form_widget(form.birthDay) }}
+    </div>
+
+    <div class="input-group">
+        {{ form_label(form.phoneNumber) }}
+        {{ form_widget(form.phoneNumber, {
+            'attr': {
+                'placeholder': '06 00 00 00 00'
+            }
+        }) }}
+    </div>
+
+    {{ form_rest(form) }}
+
+    <button class="submit" type="submit">Completer le profil</button>
+
+    {{ form_end(form) }}
+{% endblock %}
